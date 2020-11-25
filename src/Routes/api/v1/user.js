@@ -1,9 +1,9 @@
 const {ValidationError} = require('joi')
 const { Router } = require('express');
-const { listAll,list, save } = require('../../../Controller/UserController');
+const { listAll,list, save, update,remove } = require('../../../Controller/UserController');
 const {userValidation} = require('../../../Validation/UserVlidation');
 
-
+//Routes to USERS
 const router = Router();
 router.get('/', async (req, res) => {
   try {
@@ -17,7 +17,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-      const response = await list();
+    const {id} = req.params
+      const response = await list(id);
       res.status(200).json(response)
   } catch (error) {
       console.log(error)
@@ -44,5 +45,18 @@ router.post('/', async (req, res) => {
     res.status(500).end();
     }
 });
+
+
+router.delete('/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const response = await remove(id);
+      res.status(200).json('successfully removed',response)
+  } catch (error) {
+    console.log(error)
+    res.status(500)
+  }
+})
+
 
 module.exports = router;
